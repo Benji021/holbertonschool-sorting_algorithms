@@ -10,36 +10,27 @@
  */
 void selection_sort(int *array, size_t size)
 {
-    int *min;
-    size_t i, j;
+	int temp = 0;
+	size_t current_i;
+	/*Index of the currently found minimum element*/
+	size_t i, j;
 
-    if (array == NULL || size < 2)
-        return;
+	for (i = 0; i < size; i++)
+	{
+		current_i = i;
 
-    for (i = 0; i < size - 1; i++)
-    {
-        min = array + i;
-        for (j = i + 1; j < size; j++)
-        {
-            if (array[j] < *min)
-                min = array + j;
-        }
-
-        if (min != (array + i))
-        {
-            // Échange des éléments
-            int temp = array[i];
-            array[i] = *min;
-            *min = temp;
-
-            // Affichage de l'état du tableau après l'échange
-            for (j = 0; j < size; j++)
-            {
-                printf("%d", array[j]);
-                if (j < size - 1)
-                    printf(", ");
-            }
-            printf("\n");
-        }
-    }
+		for (j = i + 1; j < size; j++)
+		{
+			if (array[current_i] > array[j])
+				current_i = j;
+		}
+	/* swap if smaller elem is found*/
+		if (current_i != i)
+		{
+			temp = array[i];
+			array[i] = array[current_i];
+			array[current_i] = temp;
+			print_array(array, size);
+		}
+	}
 }
