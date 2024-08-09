@@ -11,60 +11,38 @@
 
 void insertion_sort_list(listint_t **list)
 {
-	if (!list || !*list || !(*list)->next)
-	{
+	listint_t *current, *temp, *next;
+
+	if (list == NULL || *list == NULL)
 		return;
-	}
 
-	listint_t *sorted = NULL;
-	listint_t *current = *list;
-	listint_t *next = NULL;
+	current = (*list)->next;
 
-	while (current)
+	while (current != NULL)
 	{
-	next = current->next;
-	listint_t *insert_pos = sorted;
+		next = current->next;
+		temp = current->prev;
 
-	if (!sorted || sorted->n >= current->n)
-	{
-		current->next = sorted;
-		current->prev = NULL;
 
-	    if (sorted)
+		while (temp != NULL && temp->n > current->n)
 		{
-		sorted->prev = current;
+			if (temp->prev != NULL)
+				temp->prev->next = current;
+			else
+				*list = current;
+
+			if (current->next != NULL)
+				current->next->prev = temp;
+
+			temp->next = current->next;
+			current->prev = temp->prev;
+			current->next = temp;
+			temp->prev = current;
+
+			temp = current->prev;
+
+			print_list(*list);
 		}
-		sorted = current;
+		current = next;
 	}
-	else
-	{
-	while (insert_pos->next && insert_pos->next->n < current->n)
-	{
-		insert_pos = insert_pos->next;
-	}
-		current->next = insert_pos->next;
-	if (insert_pos->next)
-		{
-		insert_pos->next->prev = current;
-		}
-
-	insert_pos->next = current;
-	current->prev = insert_pos;
-	
-// Affichage de l'état actuel de la liste après chaque insertion
-        listint_t *tmp = sorted;
-        printf("Current list: ");
-        while (tmp)
-        {
-            printf("%d ", tmp->n);
-            tmp = tmp->next;
-        }
-        printf("\n");
-	
-	}
-
-	current = next;
-	}
-
-	*list = sorted;
 }
